@@ -1,0 +1,1 @@
+ERROR:scraperLog:Error sending result: 'HTTPError()'. Reason: 'TypeError("cannot serialize '_io.BufferedReader' object",)'
