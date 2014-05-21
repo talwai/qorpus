@@ -12,10 +12,6 @@ REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 ROOT = 'http://ohhla.com/'
 
 @app.task
-def add(x, y):
-    return x + y
-
-@app.task
 def crawl_link(cl):
     name, url = cl[0], cl[1]
     print ("Scraping ", name)

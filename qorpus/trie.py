@@ -8,20 +8,12 @@ class Trie:
     def __init__(self):
         self.root = defaultdict(Trie) #dict to hold children
         self.value = None
-        self.underscore_root = None #Markers for underscore search
-        self.underscore_node = None
 
     def add(self, string, value):
         """Add the string `s` to the
         `Trie` and map it to the given value."""
         head, tail = string[0], string[1:]
         cur_node = self.root[head]
-
-        if '_' in string:
-            self.underscore_root = True
-
-        if head == '_':
-            self.underscore_node = cur_node
 
         if not tail:
             cur_node.value = value
