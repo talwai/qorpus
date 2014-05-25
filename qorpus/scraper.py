@@ -3,22 +3,24 @@ from urllib.request import urlopen
 from urllib.parse import urlparse
 
 class QorpusScraper(object):
-    def __init__(self, spider=None, strip_fn=None):
+    def __init__(self, spider=None, strip_fn=None, urls=[], async=False):
         self.spider = spider
+        self.urls = (u for u in urls) if urls else []
         self.strip_fn = strip_fn
+        self.async = async
 
     def run(self):
-        #if isinstance(self.strip_fn, app.task):
-        #    for ln in self.spider.run():
-        #        yield self.strip_fn.delay(urlopen(ln))
-        #else:
-        for ln in self.spider.run():
-            doc = BeautifulSoup(self.spider.urlopen(ln))
-            #try:
-            #    doc = urlopen(ln)
-            #except ValueError:
-            #    doc = urlopen(self.spider.base + ln)
-            yield self.strip_fn(doc)
+        if not self.spider:
+            gtr = self.urls
+        else:
+            gtr = self.spider.run()
+
+        for ln in gtr:
+            if self.async:
+                yield self.strip_fn.delay(BeautifulSoup(self.spider.urlopen(ln)))
+            else:
+                doc = BeautifulSoup(self.spider.urlopen(ln))
+                yield self.strip_fn(doc)
 
 
 class QorpusSpider(object):

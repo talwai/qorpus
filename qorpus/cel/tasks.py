@@ -18,6 +18,16 @@ def crawl_link(cl):
     for txt in scrape_txt_from_url(url):
         REDIS.append(name, txt)
 
+@app.task
+def stripper(doc):
+    try:
+        text_container = doc.pre if doc.pre else doc.body
+    except AttributeError:
+        text_container = doc
+
+    txt = text_container.text
+    return clean_text(txt)
+
 def scrape_txt_from_url(url):
     d = BeautifulSoup(urlopen(ROOT + url))
     lyric_urls = [lk.get('href') for lk in d.find_all('a')
