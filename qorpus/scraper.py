@@ -10,6 +10,7 @@ class QorpusScraper(object):
         self.async = async
 
     def run(self):
+        #Decide generator function
         if not self.spider:
             gtr = self.urls
         else:
@@ -44,7 +45,7 @@ class QorpusSpider(object):
         return doc
 
     def run(self, url=None, depth=0):
-        url = url if url else self.start
+        url = url['url'] if url else self.start
         doc = BeautifulSoup(self.urlopen(url))
         if self.strategies:
             strategy = self.strategies[depth]
